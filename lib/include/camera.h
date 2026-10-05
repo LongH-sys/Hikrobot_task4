@@ -11,6 +11,7 @@ public:
     ~Camera();
     bool open();
     bool close();
+    bool configureTriggerMode();
     bool setTriggerMode(bool enable);
     bool startGrabbing();
     bool stopGrabbing();

@@ -36,7 +36,7 @@ MV_CC_DEVICE_INFO* Camera_Manage::selectDevice()
         return nullptr;
     }
     unsigned int deviceNumber;
-    std::cout <<"请选择设备(1-"<<deviceList.nDeviceNum<<"):";
+    std::cout <<"请选择设备(1~"<<deviceList.nDeviceNum<<"):";
     if (!(std::cin >>deviceNumber))
     {
         std::cerr <<"输入无效"<<std::endl;

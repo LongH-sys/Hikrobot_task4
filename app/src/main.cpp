@@ -11,5 +11,9 @@ int main()
     {
         return -1;
     }
+    if (!camera.configureTriggerMode())
+    {
+        return -1;
+    }
     return 0;
 }
