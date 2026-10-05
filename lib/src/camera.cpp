@@ -1,6 +1,7 @@
 #include "camera.h"
 #include <iostream>
 #include "MvCameraControl.h"
+#include <opencv2/opencv.hpp>
 Camera::Camera(MV_CC_DEVICE_INFO* info)
 {
     handle = nullptr;
@@ -93,7 +94,14 @@ void __stdcall Camera::imageCallback(unsigned char* pData,MV_FRAME_OUT_INFO_EX* 
     {
         return;
     }
-    std::cout <<"收到图像,帧号:"<<pFrameInfo->nFrameNum<<",宽"<<pFrameInfo->nWidth<<",高:"<<pFrameInfo->nHeight<<std::endl;
+    if (pFrameInfo->enPixelType != PixelType_Gvsp_RGB8_Packed)
+    {
+        std::cerr <<"当前图像不是RGB8格式"<<std::endl;
+        return;
+    }
+    cv::Mat rgb(pFrameInfo->nHeight,pFrameInfo->nWidth,CV_8UC3,pData);
+    cv::Mat bgr;
+    cv::cvtColor(rgb,bgr,cv::COLOR_RGB2BGR);
 }
 bool Camera::startGrabbing()
 {
