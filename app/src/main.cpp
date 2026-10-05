@@ -15,5 +15,9 @@ int main()
     {
         return -1;
     }
+    if (!camera.startGrabbing())
+    {
+        return -1;
+    }
     return 0;
 }

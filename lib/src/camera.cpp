@@ -68,7 +68,7 @@ bool Camera::setTriggerMode(bool enable)
 {
     if (handle == nullptr)
     {
-        std::cerr <<"相机尚未打开"<<std::endl;
+        std::cerr <<"相机句柄为空"<<std::endl;
         return false;
     }
     int nRet;
@@ -87,4 +87,32 @@ bool Camera::setTriggerMode(bool enable)
     }
     return true;
 }
-
+void __stdcall Camera::imageCallback(unsigned char* pData,MV_FRAME_OUT_INFO_EX* pFrameInfo,void* pUser)
+{
+    if (pData == nullptr || pFrameInfo == nullptr)
+    {
+        return;
+    }
+    std::cout <<"收到图像,帧号:"<<pFrameInfo->nFrameNum<<",宽"<<pFrameInfo->nWidth<<",高:"<<pFrameInfo->nHeight<<std::endl;
+}
+bool Camera::startGrabbing()
+{
+    if (handle == nullptr)
+    {
+        std::cerr <<"相机句柄为空"<<std::endl;
+        return false;
+    }
+    int nRet = MV_CC_RegisterImageCallBackEx(handle,imageCallback,nullptr);
+    if (nRet != MV_OK)
+    {
+        std::cerr <<"注册图像回调失败"<<std::endl;
+        return false;
+    }
+    nRet = MV_CC_StartGrabbing(handle);
+    if (nRet != MV_OK)
+    {
+        std::cerr <<"开始采集失败"<<std::endl;
+        return false;
+    }
+    return true;
+}
