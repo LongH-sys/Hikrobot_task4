@@ -1,7 +1,7 @@
-#include "SDKmanager.h"
+#include "sdk_manage.h"
 #include <iostream>
 #include "MvCameraControl.h"
-SDKManager::SDKManager()
+sdk_manage::sdk_manage()
 {
     int nRet = MV_CC_Initialize();
     if (nRet != MV_OK)
@@ -9,7 +9,7 @@ SDKManager::SDKManager()
         std::cerr <<"SDK初始化失败"<<std::endl;
     }
 }
-    SDKManager::~SDKManager()
+    sdk_manage::~sdk_manage()
 {
     MV_CC_Finalize();
 }

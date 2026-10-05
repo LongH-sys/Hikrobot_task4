@@ -1,9 +1,15 @@
 #include "camera.h"
-#include "SDKmanager.h"
+#include "sdk_manage.h"
+#include "camera_manage.h"
 #include <iostream>
 int main()
 {
-    SDKManager sdk;
-    Camera camera;
+    sdk_manage sdk;
+    Camera_Manage cam_manage;
+    Camera camera(cam_manage.selectDevice());
+    if (!camera.open())
+    {
+        return -1;
+    }
     return 0;
 }
