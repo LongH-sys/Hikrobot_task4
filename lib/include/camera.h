@@ -15,6 +15,7 @@ public:
     bool configureTriggerMode();
     bool setTriggerMode(bool enable);
     bool startGrabbing();
+    void waitForStop();
     bool stopGrabbing();
 };
 #endif

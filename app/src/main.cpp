@@ -19,5 +19,10 @@ int main()
     {
         return -1;
     }
+    camera.waitForStop();
+    if (!camera.stopGrabbing())
+    {
+        return -1;
+    }
     return 0;
 }

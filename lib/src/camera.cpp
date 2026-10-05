@@ -116,3 +116,30 @@ bool Camera::startGrabbing()
     }
     return true;
 }
+void Camera::waitForStop()
+{
+    std::cout <<"正在采集,输入q并回车停止"<<std::endl;
+    char command;
+    while (std::cin >>command)
+    {
+        if (command == 'q')
+        {
+            return;
+        }
+    }
+}
+bool Camera::stopGrabbing()
+{
+    if (handle == nullptr)
+    {
+        return false;
+    }
+    int nRet = MV_CC_StopGrabbing(handle);
+    if (nRet != MV_OK)
+    {
+        std::cerr <<"停止采集失败"<<std::endl;
+        return false;
+    } 
+    std::cout <<"停止采集成功"<<std::endl;
+    return true;
+}
