@@ -90,7 +90,7 @@ bool Camera::setTriggerMode(bool enable)
 }
 void __stdcall Camera::imageCallback(unsigned char* pData,MV_FRAME_OUT_INFO_EX* pFrameInfo,void* pUser)
 {
-    if (pData == nullptr || pFrameInfo == nullptr)
+    if (pData == nullptr || pFrameInfo == nullptr || pUser == nullptr)
     {
         return;
     }
@@ -102,6 +102,9 @@ void __stdcall Camera::imageCallback(unsigned char* pData,MV_FRAME_OUT_INFO_EX* 
     cv::Mat rgb(pFrameInfo->nHeight,pFrameInfo->nWidth,CV_8UC3,pData);
     cv::Mat bgr;
     cv::cvtColor(rgb,bgr,cv::COLOR_RGB2BGR);
+    Camera* camera = static_cast<Camera*>(pUser);
+    std::lock_guard<std::mutex> lock(camera->frameMutex);
+    camera->latestFrame = bgr;
 }
 bool Camera::startGrabbing()
 {
@@ -110,7 +113,7 @@ bool Camera::startGrabbing()
         std::cerr <<"相机句柄为空"<<std::endl;
         return false;
     }
-    int nRet = MV_CC_RegisterImageCallBackEx(handle,imageCallback,nullptr);
+    int nRet = MV_CC_RegisterImageCallBackEx(handle,imageCallback,this);
     if (nRet != MV_OK)
     {
         std::cerr <<"注册图像回调失败"<<std::endl;
@@ -126,15 +129,26 @@ bool Camera::startGrabbing()
 }
 void Camera::waitForStop()
 {
-    std::cout <<"正在采集,输入q并回车停止"<<std::endl;
-    char command;
-    while (std::cin >>command)
+    cv::namedWindow("Camera",cv::WINDOW_NORMAL);
+    std::cout <<"请在图像窗口按q停止采集"<<std::endl;
+    while (true)
     {
-        if (command == 'q')
+        cv::Mat image;
         {
-            return;
+            std::lock_guard<std::mutex> lock(frameMutex);
+            image = latestFrame.clone();
+        }
+        if (!image.empty())
+        {
+            cv::imshow("Camera",image);
+        }
+        int key = cv::waitKey(10);
+        if (key == 'q' || key == 'Q')
+        {
+            break;
         }
     }
+    cv::destroyAllWindows();
 }
 bool Camera::stopGrabbing()
 {
