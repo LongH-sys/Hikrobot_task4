@@ -17,27 +17,44 @@ bool Camera::close()
     {
         return true;
     }
-    int nRet = MV_CC_CloseDevice(handle);
     bool success = true;
+    if (opened)
+    {
+        int nRet = MV_CC_CloseDevice(handle);
+        if (nRet != MV_OK)
+        {
+            std::cerr <<"关闭相机失败"<<std::endl;
+            success = false;
+        }
+        else
+        {
+            opened = false;
+        }
+    }
+    int nRet = MV_CC_DestroyHandle(handle);
     if (nRet != MV_OK)
     {
-        std::cerr <<"关闭相机失败"<<std::endl;
-        success = false;
+        std::cerr <<"销毁句柄失败"<<std::endl;
+        return false;
     }
-    nRet = MV_CC_DestroyHandle(handle);
-    if (nRet != MV_OK)
-        {
-            std::cerr <<"销毁句柄失败"<<std::endl;
-            return false;
-        }
     handle = nullptr;
+    opened = false;
     return success;
 }
 bool Camera::open()
 {
+    if (opened)
+    {
+        return true;
+    }
     if (info == nullptr)
     {
         std::cerr <<"设备信息为空"<<std::endl;
+        return false;
+    }
+    if (handle != nullptr)
+    {
+        std::cerr <<"旧句柄尚未清理,请先关闭"<<std::endl;
         return false;
     }
     int nRet = MV_CC_CreateHandle(&handle, info);
@@ -50,8 +67,18 @@ bool Camera::open()
     if (nRet != MV_OK)
     {
         std::cerr <<"打开设备失败"<<std::endl;
+        int nRet = MV_CC_DestroyHandle(handle);
+        if (nRet == MV_OK)
+        {
+            handle = nullptr;
+        }
+        else
+        {
+            std::cerr <<"销毁句柄失败"<<std::endl;
+        }
         return false;
     }
+    opened = true;
     return true;
 }
 bool Camera::configureTriggerMode()

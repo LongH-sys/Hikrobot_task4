@@ -11,6 +11,8 @@ private:
     static void __stdcall imageCallback(unsigned char* pData,MV_FRAME_OUT_INFO_EX* pFrameInfo,void* pUser);
     cv::Mat latestFrame;
     std::mutex frameMutex;
+    bool opened = false;
+    bool grabbing = false;
 public:
     Camera(MV_CC_DEVICE_INFO* info);
     ~Camera();
