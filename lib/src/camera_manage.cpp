@@ -21,6 +21,28 @@ bool Camera_Manage::camera_enum()
     if (deviceList.nDeviceNum > 0)
     {
         std::cout <<"发现设备数量:"<<deviceList.nDeviceNum<<std::endl;
+        for (unsigned int i=0;i < deviceList.nDeviceNum;++i)
+        {
+            MV_CC_DEVICE_INFO* info = deviceList.pDeviceInfo[i];
+            std::cout <<"设备"<<i + 1<<":";
+            if (info == nullptr)
+            {
+                std::cout <<"设备信息为空"<<std::endl;
+                continue;
+            }
+            if (info->nTLayerType == MV_GIGE_DEVICE)
+            {
+                std::cout <<"Gige"<<",型号:"<<info->SpecialInfo.stGigEInfo.chModelName<<",序列号:"<<info->SpecialInfo.stGigEInfo.chSerialNumber<<std::endl;
+            }
+            else if (info->nTLayerType == MV_USB_DEVICE)
+            {
+                std::cout <<"USB"<<",型号:"<<info->SpecialInfo.stUsb3VInfo.chModelName<<",序列号"<<info->SpecialInfo.stUsb3VInfo.chSerialNumber<<std::endl;
+            }
+            else
+            {
+                std::cout <<"暂不支持显示此设备类型的信息"<<std::endl;
+            }
+        }
     }
     else
     {

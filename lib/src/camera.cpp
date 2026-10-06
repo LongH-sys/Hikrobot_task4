@@ -213,7 +213,7 @@ void Camera::waitForStop()
     }
     else
     {
-        std::cout <<"连续采集中可,请在图像窗口按q停止采集"<<std::endl;
+        std::cout <<"连续采集中,请在图像窗口按q停止采集"<<std::endl;
     }
     while (true)
     {
