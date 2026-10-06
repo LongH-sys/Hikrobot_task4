@@ -1,5 +1,7 @@
 #include <camera.h>
+
 #include <camera_manage.h>
+
 #include <sdk_manage.h>
 
 int main()
