@@ -18,6 +18,13 @@ bool Camera::close()
         return true;
     }
     bool success = true;
+    if (grabbing)
+    {
+        if (!stopGrabbing())
+        {
+            success = false;
+        }
+    }
     if (opened)
     {
         int nRet = MV_CC_CloseDevice(handle);
@@ -39,6 +46,7 @@ bool Camera::close()
     }
     handle = nullptr;
     opened = false;
+    grabbing = false;
     return success;
 }
 bool Camera::open()
@@ -135,10 +143,14 @@ void __stdcall Camera::imageCallback(unsigned char* pData,MV_FRAME_OUT_INFO_EX* 
 }
 bool Camera::startGrabbing()
 {
-    if (handle == nullptr)
+    if (!opened)
     {
-        std::cerr <<"相机句柄为空"<<std::endl;
+        std::cerr <<"相机尚未打开"<<std::endl;
         return false;
+    }
+    if (grabbing)
+    {
+        return true;
     }
     int nRet = MV_CC_RegisterImageCallBackEx(handle,imageCallback,this);
     if (nRet != MV_OK)
@@ -152,6 +164,7 @@ bool Camera::startGrabbing()
         std::cerr <<"开始采集失败"<<std::endl;
         return false;
     }
+    grabbing = true;
     return true;
 }
 void Camera::waitForStop()
@@ -179,9 +192,9 @@ void Camera::waitForStop()
 }
 bool Camera::stopGrabbing()
 {
-    if (handle == nullptr)
+    if (!grabbing)
     {
-        return false;
+        return true;
     }
     int nRet = MV_CC_StopGrabbing(handle);
     if (nRet != MV_OK)
@@ -189,6 +202,7 @@ bool Camera::stopGrabbing()
         std::cerr <<"停止采集失败"<<std::endl;
         return false;
     } 
+    grabbing = false;
     std::cout <<"停止采集成功"<<std::endl;
     return true;
 }
