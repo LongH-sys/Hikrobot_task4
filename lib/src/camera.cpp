@@ -146,14 +146,22 @@ void __stdcall Camera::imageCallback(unsigned char* pData,MV_FRAME_OUT_INFO_EX* 
     {
         return;
     }
-    if (pFrameInfo->enPixelType != PixelType_Gvsp_RGB8_Packed)
+    cv::Mat bgr;
+    if (pFrameInfo->enPixelType == PixelType_Gvsp_RGB8_Packed)
     {
-        std::cerr <<"当前图像不是RGB8格式"<<std::endl;
+        cv::Mat rgb(pFrameInfo->nHeight,pFrameInfo->nWidth,CV_8UC3,pData);
+        cv::cvtColor(rgb,bgr,cv::COLOR_RGB2BGR);
+    }
+    else if (pFrameInfo->enPixelType == PixelType_Gvsp_BayerRG8)
+    {
+        cv::Mat bayer(pFrameInfo->nHeight,pFrameInfo->nWidth,CV_8UC1,pData);
+        cv::cvtColor(bayer,bgr,cv::COLOR_BayerRGGB2BGR);
+    }
+    else
+    {
+        std::cerr <<"暂不支持此像素格式:"<<pFrameInfo->enPixelType<<std::endl;
         return;
     }
-    cv::Mat rgb(pFrameInfo->nHeight,pFrameInfo->nWidth,CV_8UC3,pData);
-    cv::Mat bgr;
-    cv::cvtColor(rgb,bgr,cv::COLOR_RGB2BGR);
     Camera* camera = static_cast<Camera*>(pUser);
     std::lock_guard<std::mutex> lock(camera->frameMutex);
     camera->latestFrame = bgr;
