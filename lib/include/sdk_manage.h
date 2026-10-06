@@ -7,8 +7,6 @@ private:
 
 public:
     SdkManager();
-    SdkManager(const SdkManager&) = delete;
-    SdkManager& operator=(const SdkManager&) = delete;
     ~SdkManager();
     bool is_initialized() const;
 };
