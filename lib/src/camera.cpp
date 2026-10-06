@@ -235,6 +235,10 @@ void Camera::waitForStop()
             cv::imshow("Camera",image);
         }
         int key = cv::waitKey(10);
+        if (cv::getWindowProperty("Camera",cv::WND_PROP_AUTOSIZE)<0)
+        {
+            break;
+        }
         if (key == 'q' || key == 'Q')
         {
             break;
