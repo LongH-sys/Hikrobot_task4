@@ -1,12 +1,14 @@
-#ifndef SDK_MANAGE_H
-#define SDK_MANAGE_H
-class sdk_manage
+#pragma once
+
+class SdkManager
 {
 private:
-    bool initialized = false;
+    bool m_initialized = false;
+
 public:
-    sdk_manage();
-    ~sdk_manage();
-    bool isInitialized() const;
+    SdkManager();
+    SdkManager(const SdkManager&) = delete;
+    SdkManager& operator=(const SdkManager&) = delete;
+    ~SdkManager();
+    bool is_initialized() const;
 };
-#endif

@@ -1,30 +1,30 @@
-#include "camera.h"
-#include "sdk_manage.h"
-#include "camera_manage.h"
-#include <iostream>
+#include <camera.h>
+#include <camera_manage.h>
+#include <sdk_manage.h>
+
 int main()
 {
-    sdk_manage sdk;
-    if (!sdk.isInitialized())
+    SdkManager sdk;
+    if (!sdk.is_initialized())
     {
         return -1;
     }
-    Camera_Manage cam_manage;
-    Camera camera(cam_manage.selectDevice());
+    CameraManager cam_manage;
+    Camera camera(cam_manage.select_device());
     if (!camera.open())
     {
         return -1;
     }
-    if (!camera.configureTriggerMode())
+    if (!camera.configure_trigger_mode())
     {
         return -1;
     }
-    if (!camera.startGrabbing())
+    if (!camera.start_grabbing())
     {
         return -1;
     }
-    camera.waitForStop();
-    if (!camera.stopGrabbing())
+    camera.wait_for_stop();
+    if (!camera.stop_grabbing())
     {
         return -1;
     }

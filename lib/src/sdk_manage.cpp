@@ -1,26 +1,29 @@
-#include "sdk_manage.h"
 #include <iostream>
-#include "MvCameraControl.h"
-sdk_manage::sdk_manage()
+
+#include <MvCameraControl.h>
+
+#include <sdk_manage.h>
+
+SdkManager::SdkManager()
 {
-    int nRet = MV_CC_Initialize();
-    if (nRet != MV_OK)
+    int result = MV_CC_Initialize();
+    if (result != MV_OK)
     {
-        std::cerr <<"SDK初始化失败"<<std::endl;
+        std::cerr << "SDK初始化失败" << std::endl;
         return;
     }
-    initialized = true;
+    m_initialized = true;
 }
-bool sdk_manage::isInitialized() const
+
+bool SdkManager::is_initialized() const
 {
-    return initialized;
+    return m_initialized;
 }
-sdk_manage::~sdk_manage()
+
+SdkManager::~SdkManager()
 {
-    if (initialized)
+    if (m_initialized)
     {
         MV_CC_Finalize();
     }
 }
-
-

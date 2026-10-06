@@ -1,16 +1,16 @@
-#ifndef CAMERA_MANAGE_H
-#define CAMERA_MANAGE_H
-#include "MvCameraControl.h"
-class Camera_Manage
+#pragma once
+
+#include <MvCameraControl.h>
+
+class CameraManager
 {
 private:
-    MV_CC_DEVICE_INFO_LIST deviceList{};
+    MV_CC_DEVICE_INFO_LIST m_device_list{};
 
 public:
-    Camera_Manage();
-    ~Camera_Manage();
-    bool camera_enum();
-    MV_CC_DEVICE_INFO* selectDevice();
-    MV_CC_DEVICE_INFO* getDeviceInfo(unsigned int deviceNumber);
+    CameraManager();
+    ~CameraManager();
+    bool enumerate_devices();
+    MV_CC_DEVICE_INFO* select_device();
+    MV_CC_DEVICE_INFO* get_device_info(unsigned int device_number);
 };
-#endif
