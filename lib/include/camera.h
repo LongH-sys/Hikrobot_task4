@@ -13,6 +13,7 @@ private:
     std::mutex frameMutex;
     bool opened = false;
     bool grabbing = false;
+    bool softwareTriggerEnabled = false;
 public:
     Camera(MV_CC_DEVICE_INFO* info);
     ~Camera();
@@ -23,5 +24,6 @@ public:
     bool startGrabbing();
     void waitForStop();
     bool stopGrabbing();
+    bool triggeronce();
 };
 #endif
