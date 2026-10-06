@@ -21,7 +21,7 @@ bool CameraManager::enumerate_devices()
     if (m_device_list.nDeviceNum > 0)
     {
         std::cout << "发现设备数量:" << m_device_list.nDeviceNum << std::endl;
-        for (unsigned int i = 0; i < m_device_list.nDeviceNum; ++i)
+        for (unsigned int i = 0; i < m_device_list.nDeviceNum; i++)
         {
             MV_CC_DEVICE_INFO* info = m_device_list.pDeviceInfo[i];
             std::cout << "设备" << i + 1 << ":";
