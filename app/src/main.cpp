@@ -5,6 +5,10 @@
 int main()
 {
     sdk_manage sdk;
+    if (!sdk.isInitialized())
+    {
+        return -1;
+    }
     Camera_Manage cam_manage;
     Camera camera(cam_manage.selectDevice());
     if (!camera.open())
