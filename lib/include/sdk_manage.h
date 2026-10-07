@@ -6,7 +6,6 @@ private:
     bool m_initialized = false;
 
 public:
-    SdkManager();
-    ~SdkManager();
-    bool is_initialized() const;
+    bool initialize();
+    bool finalize();
 };

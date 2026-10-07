@@ -2,14 +2,6 @@
 
 #include <camera_manage.h>
 
-CameraManager::CameraManager()
-{
-}
-
-CameraManager::~CameraManager()
-{
-}
-
 bool CameraManager::enumerate_devices()
 {
     int result = MV_CC_EnumDevices(MV_GIGE_DEVICE | MV_USB_DEVICE, &m_device_list);

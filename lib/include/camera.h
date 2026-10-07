@@ -23,7 +23,9 @@ private:
     bool m_software_trigger_enabled = false;
 
 public:
-    Camera(MV_CC_DEVICE_INFO* info);
+    explicit Camera(MV_CC_DEVICE_INFO* info);
+    Camera(const Camera&) = delete;
+    Camera& operator = (const Camera&) = delete;
     ~Camera();
     bool open();
     bool close();

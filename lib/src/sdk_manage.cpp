@@ -4,26 +4,34 @@
 
 #include <sdk_manage.h>
 
-SdkManager::SdkManager()
+bool SdkManager::initialize()
 {
+    if (m_initialized)
+    {
+        return true;
+    }
     int result = MV_CC_Initialize();
     if (result != MV_OK)
     {
         std::cerr << "SDK初始化失败" << std::endl;
-        return;
+        return false;
     }
     m_initialized = true;
+    return true;
 }
 
-bool SdkManager::is_initialized() const
+bool SdkManager::finalize()
 {
-    return m_initialized;
-}
-
-SdkManager::~SdkManager()
-{
-    if (m_initialized)
+    if (!m_initialized)
     {
-        MV_CC_Finalize();
+        return true;
     }
+    int result = MV_CC_Finalize();
+    if (result != MV_OK)
+    {
+        std::cerr <<"SDK反初始化失败"<<std::endl;
+        return false;
+    }
+    m_initialized = false;
+    return true;
 }
